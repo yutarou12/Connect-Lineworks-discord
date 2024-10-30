@@ -1,0 +1,15 @@
+services:
+  line-api:
+    restart: always
+    build:
+      context: "./"
+      dockerfile: "Dockerfile"
+    environment:
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
+      TRACEBACK_CHANNEL_ID: ${TRACEBACK_CHANNEL_ID}
+      ERROR_CHANNEL_ID: ${ERROR_CHANNEL_ID}
+    container_name: "lineworks"
+    volumes:
+      - ./:/app/
+    working_dir: "/app/"
+    tty: true
