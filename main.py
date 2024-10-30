@@ -1,7 +1,16 @@
 import os
 import discord
 from discord.ext import commands
+from logging import getLogger, StreamHandler, DEBUG
 import libs.env as env
+
+logger = getLogger(__name__)
+handler = StreamHandler()
+handler.setLevel(DEBUG)
+logger.setLevel(DEBUG)
+logger.addHandler(handler)
+logger.propagate = False
+
 
 extensions_list = [f[:-3] for f in os.listdir("./cogs") if f.endswith(".py")]
 
@@ -9,6 +18,7 @@ extensions_list = [f[:-3] for f in os.listdir("./cogs") if f.endswith(".py")]
 class MyBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.logger = logger
 
     async def setup_hook(self):
         await bot.load_extension('jishaku')
