@@ -13,6 +13,16 @@ services:
       - ./:/app/
     working_dir: "/app/"
     tty: true
+  callback-api:
+    restart: always
+    build:
+      context: "./callback-api"
+      dockerfile: "Dockerfile"
+    container_name: "lineworks-callback"
+    volumes:
+      - ./:/app/
+    working_dir: "/app/"
+    tty: true
   tunnel:
     image: cloudflare/cloudflared
     restart: unless-stopped
