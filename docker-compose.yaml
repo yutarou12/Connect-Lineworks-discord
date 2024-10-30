@@ -13,3 +13,12 @@ services:
       - ./:/app/
     working_dir: "/app/"
     tty: true
+  tunnel:
+    image: cloudflare/cloudflared
+    restart: unless-stopped
+    command:
+      - tunnel
+      - --no-autoupdate
+      - run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}

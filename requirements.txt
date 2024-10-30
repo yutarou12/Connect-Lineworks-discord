@@ -4,3 +4,4 @@ jishaku
 requests
 pyjwt
 cryptography
+fastapi
