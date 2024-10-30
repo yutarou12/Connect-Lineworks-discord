@@ -14,7 +14,7 @@ services:
       LW_API_20_CHANNEL_ID: ${LW_API_20_CHANNEL_ID}
     container_name: "lineworks"
     volumes:
-      - ./:/app/bot/
+      - ./bot:/app/bot/
     working_dir: "/app/bot/"
     tty: true
   callback-api:
@@ -31,7 +31,7 @@ services:
       LW_API_20_CHANNEL_ID: ${LW_API_20_CHANNEL_ID}
     container_name: "lineworks-callback"
     volumes:
-      - ./:/app/api/
+      - ./callback-api:/app/api/
     working_dir: "/app/api/"
     tty: true
   tunnel:
