@@ -7,7 +7,7 @@ from discord.ext import commands
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 
-from bot.libs import env
+import libs.BotEnv as env
 
 BASE_API_URL = "https://www.worksapis.com/v1.0"
 BASE_AUTH_URL = "https://auth.worksmobile.com/oauth2/v2.0"

@@ -2,7 +2,7 @@ import os
 import discord
 from discord.ext import commands
 from logging import getLogger, StreamHandler, DEBUG
-import bot.libs.env as env
+import libs.BotEnv as env
 
 logger = getLogger(__name__)
 handler = StreamHandler()
