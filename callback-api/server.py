@@ -3,6 +3,8 @@ import uvicorn
 
 from logging import getLogger, StreamHandler, DEBUG
 
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization
 from requests.structures import CaseInsensitiveDict
 from requests.exceptions import RequestException
 
@@ -28,6 +30,16 @@ logger.addHandler(handler)
 logger.propagate = False
 
 
+def load_privkey(filename):
+    with open(filename, 'rb') as fpr:
+        privkey = serialization.load_pem_private_key(
+            fpr.read(),
+            password=None,
+            backend=default_backend()
+        )
+    return privkey
+
+
 @app.post("/callback")
 async def callback(request: Request):
     body_raw = await request.body()
@@ -45,7 +57,7 @@ async def callback(request: Request):
     client_id = env.LW_API_20_CLIENT_ID
     client_secret = env.LW_API_20_CLIENT_SECRET
     service_account_id = env.LW_API_20_SERVICE_ACCOUNT_ID
-    privatekey = env.LW_API_20_PRIVATEKEY
+    privatekey = load_privkey("./key/private_20241030132604.key")
 
     # Validation
     signature = headers.get("x-works-signature")
