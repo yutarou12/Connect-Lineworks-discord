@@ -1,15 +1,13 @@
 import json
-from urllib import parse
 from datetime import datetime
 
-import discord
 import jwt
 import requests
 from discord.ext import commands
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 
-from libs import env
+from bot.libs import env
 
 BASE_API_URL = "https://www.worksapis.com/v1.0"
 BASE_AUTH_URL = "https://auth.worksmobile.com/oauth2/v2.0"

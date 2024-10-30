@@ -2,7 +2,7 @@ import os
 import discord
 from discord.ext import commands
 from logging import getLogger, StreamHandler, DEBUG
-import libs.env as env
+import bot.libs.env as env
 
 logger = getLogger(__name__)
 handler = StreamHandler()
@@ -12,7 +12,7 @@ logger.addHandler(handler)
 logger.propagate = False
 
 
-extensions_list = [f[:-3] for f in os.listdir("./cogs") if f.endswith(".py")]
+extensions_list = [f[:-3] for f in os.listdir("cogs") if f.endswith(".py")]
 
 
 class MyBot(commands.Bot):

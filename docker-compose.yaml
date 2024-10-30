@@ -2,26 +2,37 @@ services:
   line-api:
     restart: always
     build:
-      context: "./"
+      context: "./bot"
       dockerfile: "Dockerfile"
     environment:
       DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
-      TRACEBACK_CHANNEL_ID: ${TRACEBACK_CHANNEL_ID}
-      ERROR_CHANNEL_ID: ${ERROR_CHANNEL_ID}
+      LW_API_20_CLIENT_ID: ${LW_API_20_CLIENT_ID}
+      LW_API_20_CLIENT_SECRET: ${LW_API_20_CLIENT_SECRET}
+      LW_API_20_SERVICE_ACCOUNT_ID: ${LW_API_20_SERVICE_ACCOUNT_ID}
+      LW_API_20_BOT_ID: ${LW_API_20_BOT_ID}
+      LW_API_20_BOT_SECRET: ${LW_API_20_BOT_SECRET}
+      LW_API_20_CHANNEL_ID: ${LW_API_20_CHANNEL_ID}
     container_name: "lineworks"
     volumes:
-      - ./:/app/
-    working_dir: "/app/"
+      - ./:/app/bot/
+    working_dir: "/app/bot/"
     tty: true
   callback-api:
     restart: always
     build:
       context: "./callback-api"
       dockerfile: "Dockerfile"
+    environment:
+      LW_API_20_CLIENT_ID: ${LW_API_20_CLIENT_ID}
+      LW_API_20_CLIENT_SECRET: ${LW_API_20_CLIENT_SECRET}
+      LW_API_20_SERVICE_ACCOUNT_ID: ${LW_API_20_SERVICE_ACCOUNT_ID}
+      LW_API_20_BOT_ID: ${LW_API_20_BOT_ID}
+      LW_API_20_BOT_SECRET: ${LW_API_20_BOT_SECRET}
+      LW_API_20_CHANNEL_ID: ${LW_API_20_CHANNEL_ID}
     container_name: "lineworks-callback"
     volumes:
-      - ./:/app/
-    working_dir: "/app/"
+      - ./:/app/api/
+    working_dir: "/app/api/"
     tty: true
   tunnel:
     image: cloudflare/cloudflared
@@ -31,4 +42,4 @@ services:
       - --no-autoupdate
       - run
     environment:
-      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN}
