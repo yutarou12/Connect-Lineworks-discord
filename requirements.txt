@@ -5,3 +5,4 @@ requests
 pyjwt
 cryptography
 fastapi
+uvicorn

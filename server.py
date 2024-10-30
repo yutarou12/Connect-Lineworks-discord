@@ -1,4 +1,5 @@
 import time
+import uvicorn
 
 from logging import getLogger, StreamHandler, DEBUG
 
@@ -110,3 +111,6 @@ async def callback(request: Request):
             break
 
     return {}
+
+if __name__ == "__main__":
+    uvicorn.run("server:app", host="0.0.0.0", port=8085, log_level="debug")
