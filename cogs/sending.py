@@ -52,20 +52,18 @@ class SendingCog(commands.Cog):
         """アクセストークン取得"""
         url = '{}/token'.format(BASE_AUTH_URL)
         headers = {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            "Content-Type": "application/x-www-form-urlencoded"
         }
         params = {
-            "assertion": jws,
-            "grant_type": parse.quote("urn:ietf:params:oauth:grant-type:jwt-bearer"),
-            "client_id": client_id,
-            "client_secret": client_secret,
-            "scope": "bot"
+            "assertion": f"{jws}",
+            "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+            "client_id": f"{client_id}",
+            "client_secret": f"{client_secret}",
+            "scope": scope
         }
-        self.bot.logger.debug(params)
-        form_data = json.dumps(params)
-        r = requests.post(url=url, json=form_data, headers=headers)
+        form_data = params
+        r = requests.post(url=url, data=form_data, headers=headers)
         body = json.loads(r.text)
-        self.bot.logger.debug(body)
         return body
 
     def refresh_access_token(self, client_id, client_secret, refresh_token):
@@ -90,8 +88,8 @@ class SendingCog(commands.Cog):
         """メッセージ送信"""
         url = "{}/bots/{}/users/{}/messages".format(BASE_API_URL, bot_id, channel_id)
         headers = {
-            'Content-Type': 'application/json',
-            'Authorization': "Bearer {}".format(access_token)
+            "Content-Type": "application/json",
+            "Authorization": "Bearer {}".format(access_token)
         }
         params = content
         form_data = json.dumps(params)
@@ -107,20 +105,18 @@ class SendingCog(commands.Cog):
             return
 
         if message.channel.id in self.channel_list:
-            self.bot.logger.debug(message.content)
             client_id = env.LW_API_20_CLIENT_ID
             client_secret = env.LW_API_20_CLIENT_SECRET
             service_account_id = env.LW_API_20_SERVICE_ACCOUNT_ID
             privatekey = self.load_privkey("./key/private_20241030132604.key")
             bot_id = env.LW_API_20_BOT_ID
             channel_id = env.LW_API_20_CHANNEL_ID
-            scope = 'bot.message bot.read'
+            scope = 'bot bot.message bot.read'
 
             # JWT生
             jwttoken = self.get_jwt(client_id, service_account_id, privatekey)
             # アクセストークン取得
             res = self.get_access_token(client_id, client_secret, scope, jwttoken)
-            self.bot.logger.debug(res)
             access_token = res["access_token"]
 
             # APIリクエスト (メッセージ送信)
