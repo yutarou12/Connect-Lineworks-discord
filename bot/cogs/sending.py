@@ -85,7 +85,7 @@ class SendingCog(commands.Cog):
 
     def send_message(self, content, bot_id, channel_id, access_token):
         """メッセージ送信"""
-        url = "{}/bots/{}/users/{}/messages".format(BASE_API_URL, bot_id, channel_id)
+        url = "{}/bots/{}/channels/{}/messages".format(BASE_API_URL, bot_id, channel_id)
         headers = {
             "Content-Type": "application/json",
             "Authorization": "Bearer {}".format(access_token)
