@@ -91,18 +91,17 @@ async def callback(request: Request):
         webhook_token = webhook_data.get("token")
 
         user_data = lineworks.get_user(user_id, global_data["access_token"])
-        user_name = f"{user_data.get('userName').get('lastName')} {user_data.get('userName').get('lastName')}"
-        res_get_access_token = lineworks.get_access_token(client_id, client_secret, service_account_id, privatekey, "user.profile.read")
-        user_photo = lineworks.get_user_photo(user_id, res_get_access_token["access_token"])
+        user_name = f"{user_data.get('userName').get('lastName')} {user_data.get('userName').get('fastName')}"
+        user_photo = lineworks.get_user_photo(user_id, global_data["access_token"])
         logger.info(user_photo)
 
         discord_content = {
             "username": user_name,
-            "content": str(content)
+            "content": str(content.get("text")),
         }
 
         res = requests.post(f"{BASE_DISCORD_API_URL}/webhooks/{webhook_id}/{webhook_token}", json=discord_content)
-        logger.info(res.json())
+        logger.info(res.content)
 
     return {}
 

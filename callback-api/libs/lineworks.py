@@ -139,7 +139,7 @@ def get_user(user_id: str, access_token: str) -> dict:
     return body
 
 
-def get_user_photo(user_id: str, access_token: str) -> CaseInsensitiveDict[str]:
+def get_user_photo(user_id: str, access_token: str):
     """Get user photo
 
     :param user_id: User ID
@@ -154,6 +154,6 @@ def get_user_photo(user_id: str, access_token: str) -> CaseInsensitiveDict[str]:
 
     r = requests.get(url=url, headers=headers)
 
-    body = r.headers
+    body = r.json()
 
-    return body
+    return r
