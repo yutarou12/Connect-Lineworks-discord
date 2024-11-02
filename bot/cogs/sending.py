@@ -17,7 +17,7 @@ BASE_AUTH_URL = "https://auth.worksmobile.com/oauth2/v2.0"
 class SendingCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.channel_list = [1301041772926996490]
+        self.channel_list = str(env.CHANNEL_LIST).split(",")
 
     def load_privkey(self, filename):
         with open(filename, 'rb') as fpr:
@@ -103,8 +103,8 @@ class SendingCog(commands.Cog):
         if not message.content:
             return
 
-        if message.channel.id in self.channel_list:
-            if not (await message.channel.webhooks()):
+        if str(message.channel.id) in self.channel_list:
+            if message.channel.id == int(env.DISCORD_CHANNEL_ID) and not (await message.channel.webhooks()):
                 await message.channel.create_webhook(name='Connect LINEWorks')
 
             client_id = env.LW_API_20_CLIENT_ID

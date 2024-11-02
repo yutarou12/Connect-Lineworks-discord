@@ -12,6 +12,8 @@ services:
       LW_API_20_BOT_ID: ${LW_API_20_BOT_ID}
       LW_API_20_BOT_SECRET: ${LW_API_20_BOT_SECRET}
       LW_API_20_CHANNEL_ID: ${LW_API_20_CHANNEL_ID}
+      DISCORD_CHANNEL_ID: ${DISCORD_CHANNEL_ID}
+      CHANNEL_LIST: ${CHANNEL_LIST}
     container_name: "lineworks"
     volumes:
       - ./bot:/app/bot/
