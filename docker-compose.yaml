@@ -23,12 +23,14 @@ services:
       context: "./callback-api"
       dockerfile: "Dockerfile"
     environment:
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
       LW_API_20_CLIENT_ID: ${LW_API_20_CLIENT_ID}
       LW_API_20_CLIENT_SECRET: ${LW_API_20_CLIENT_SECRET}
       LW_API_20_SERVICE_ACCOUNT_ID: ${LW_API_20_SERVICE_ACCOUNT_ID}
       LW_API_20_BOT_ID: ${LW_API_20_BOT_ID}
       LW_API_20_BOT_SECRET: ${LW_API_20_BOT_SECRET}
       LW_API_20_CHANNEL_ID: ${LW_API_20_CHANNEL_ID}
+      DISCORD_CHANNEL_ID: ${DISCORD_CHANNEL_ID}
     container_name: "lineworks-callback"
     volumes:
       - ./callback-api:/app/api/

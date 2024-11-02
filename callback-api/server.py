@@ -1,5 +1,6 @@
 import time
 import uvicorn
+import requests
 
 from logging import getLogger, StreamHandler, DEBUG
 
@@ -15,6 +16,7 @@ import libs.env as env
 
 BASE_API_URL = "https://www.worksapis.com/v1.0"
 BASE_AUTH_URL = "https://auth.worksmobile.com/oauth2/v2.0"
+BASE_DISCORD_API_URL = "https://discord.com/api/v10"
 SCOPE = "bot bot.message bot.read"
 
 
@@ -85,6 +87,13 @@ async def callback(request: Request):
 
     logger.info("reply")
     logger.info(res_content)
+
+    discord_header = {
+        'Authorization': f"Bot {env.DISCORD_BOT_TOKEN}"
+    }
+    res = requests.get(f"{BASE_DISCORD_API_URL}/channels/{env.DISCORD_CHANNEL_ID}", headers=discord_header)
+    logger.info(res.json())
+
     for i in range(RETRY_COUNT_MAX):
         try:
             # Reply message

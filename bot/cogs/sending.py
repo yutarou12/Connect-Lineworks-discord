@@ -1,4 +1,5 @@
 import json
+import discord
 from datetime import datetime
 
 import jwt
@@ -95,7 +96,7 @@ class SendingCog(commands.Cog):
         r.raise_for_status()
 
     @commands.Cog.listener()
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message):
         if message.author.bot:
             return
 
@@ -103,6 +104,9 @@ class SendingCog(commands.Cog):
             return
 
         if message.channel.id in self.channel_list:
+            if not (await message.channel.webhooks()):
+                await message.channel.create_webhook(name='Connect LINEWorks')
+
             client_id = env.LW_API_20_CLIENT_ID
             client_secret = env.LW_API_20_CLIENT_SECRET
             service_account_id = env.LW_API_20_SERVICE_ACCOUNT_ID
@@ -117,11 +121,13 @@ class SendingCog(commands.Cog):
             res = self.get_access_token(client_id, client_secret, scope, jwttoken)
             access_token = res["access_token"]
 
+            message_content = f"{message.clean_content}\n\n発信元：{message.channel.name} | {message.author.display_name}"
+
             # APIリクエスト (メッセージ送信)
             content = {
                 "content": {
                     "type": "text",
-                    "text": message.clean_content
+                    "text": message_content
                 }
             }
 
