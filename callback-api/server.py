@@ -7,7 +7,6 @@ from logging import getLogger, StreamHandler, DEBUG
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from requests.structures import CaseInsensitiveDict
-from requests.exceptions import RequestException
 
 from fastapi import FastAPI, Request
 
@@ -17,7 +16,7 @@ import libs.env as env
 BASE_API_URL = "https://www.worksapis.com/v1.0"
 BASE_AUTH_URL = "https://auth.worksmobile.com/oauth2/v2.0"
 BASE_DISCORD_API_URL = "https://discord.com/api/v10"
-SCOPE = "bot bot.message bot.read user.read user.profile.read"
+SCOPE = "bot bot.message bot.read user.read"
 
 
 global_data = {}
@@ -70,11 +69,6 @@ async def callback(request: Request):
     user_id = body_json["source"]["userId"]
     content = body_json["content"]
 
-    # Create response content
-    res_content = {
-        "content": content
-    }
-
     if "access_token" not in global_data:
         # Get Access Token
         logger.info("Get access token")
@@ -95,16 +89,16 @@ async def callback(request: Request):
         webhook_data = res.json()[0]
         webhook_id = webhook_data.get("id")
         webhook_token = webhook_data.get("token")
-        webhook_url = webhook_data.get("url")
 
         user_data = lineworks.get_user(user_id, global_data["access_token"])
         user_name = f"{user_data.get('userName').get('lastName')} {user_data.get('userName').get('lastName')}"
-        user_photo = lineworks.get_user_photo(user_id, global_data["access_token"])
+        res_get_access_token = lineworks.get_access_token(client_id, client_secret, service_account_id, privatekey, "user.profile.read")
+        user_photo = lineworks.get_user_photo(user_id, res_get_access_token["access_token"])
         logger.info(user_photo)
 
         discord_content = {
             "username": user_name,
-            "content": content
+            "content": str(content)
         }
 
         res = requests.post(f"{BASE_DISCORD_API_URL}/webhooks/{webhook_id}/{webhook_token}", json=discord_content)
