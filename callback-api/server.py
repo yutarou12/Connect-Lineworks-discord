@@ -17,7 +17,7 @@ import libs.env as env
 BASE_API_URL = "https://www.worksapis.com/v1.0"
 BASE_AUTH_URL = "https://auth.worksmobile.com/oauth2/v2.0"
 BASE_DISCORD_API_URL = "https://discord.com/api/v10"
-SCOPE = "bot bot.message bot.read user user.read"
+SCOPE = "bot bot.message bot.read user.read user.profile.read"
 
 
 global_data = {}
