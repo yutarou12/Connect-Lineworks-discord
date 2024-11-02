@@ -137,23 +137,3 @@ def get_user(user_id: str, access_token: str) -> dict:
     body = r.json()
 
     return body
-
-
-def get_user_photo(user_id: str, access_token: str):
-    """Get user photo
-
-    :param user_id: User ID
-    :param access_token: Access Token
-    :return: response
-    """
-    url = f"{BASE_API_URL}/users/{user_id}/photo"
-
-    headers = {
-        'Authorization': "Bearer {}".format(access_token)
-    }
-
-    r = requests.get(url=url, headers=headers)
-
-    body = r.json()
-
-    return r

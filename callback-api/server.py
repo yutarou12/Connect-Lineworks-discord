@@ -1,3 +1,5 @@
+import json
+import os
 import time
 import uvicorn
 import requests
@@ -90,19 +92,23 @@ async def callback(request: Request):
         webhook_id = webhook_data.get("id")
         webhook_token = webhook_data.get("token")
 
-        user_data = lineworks.get_user(user_id, global_data["access_token"])
-        user_name = f"{user_data.get('userName').get('lastName')} {user_data.get('userName').get('fastName')}"
-        user_photo = lineworks.get_user_photo(user_id, global_data["access_token"])
-        logger.info(user_photo)
+        # Get user cache in data directory.
+        if os.path.exists(f"data/{user_id}.json"):
+            with open(f"data/{user_id}.json", "r", encoding='utf-8') as f:
+                user_data = json.load(f)
+        else:
+            user_data = lineworks.get_user(user_id, global_data["access_token"])
+            with open(f"data/{user_id}.json", "w", encoding='utf-8') as f:
+                json.dump(user_data, f)
+
+        user_name = f"{user_data.get('userName').get('lastName')} {user_data.get('userName').get('firstName')}"
 
         discord_content = {
             "username": user_name,
             "content": str(content.get("text")),
         }
 
-        res = requests.post(f"{BASE_DISCORD_API_URL}/webhooks/{webhook_id}/{webhook_token}", json=discord_content)
-        logger.info(res.content)
-
+        requests.post(f"{BASE_DISCORD_API_URL}/webhooks/{webhook_id}/{webhook_token}", json=discord_content)
     return {}
 
 if __name__ == "__main__":
