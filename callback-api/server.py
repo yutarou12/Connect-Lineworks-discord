@@ -86,12 +86,11 @@ async def callback(request: Request):
         global_data["access_token"] = res["access_token"]
 
     logger.info("reply")
-    logger.info(res_content)
 
     discord_header = {
         'Authorization': f"Bot {env.DISCORD_BOT_TOKEN}"
     }
-    res = requests.get(f"{BASE_DISCORD_API_URL}/channels/{env.DISCORD_CHANNEL_ID}", headers=discord_header)
+    res = requests.get(f"{BASE_DISCORD_API_URL}/channels/{env.DISCORD_CHANNEL_ID}/webhooks", headers=discord_header)
     logger.info(res.json())
 
     for i in range(RETRY_COUNT_MAX):
