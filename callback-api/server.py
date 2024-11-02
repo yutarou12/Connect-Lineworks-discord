@@ -17,7 +17,7 @@ import libs.env as env
 BASE_API_URL = "https://www.worksapis.com/v1.0"
 BASE_AUTH_URL = "https://auth.worksmobile.com/oauth2/v2.0"
 BASE_DISCORD_API_URL = "https://discord.com/api/v10"
-SCOPE = "bot bot.message bot.read"
+SCOPE = "bot bot.message bot.read user user.read"
 
 
 global_data = {}
@@ -91,44 +91,24 @@ async def callback(request: Request):
         'Authorization': f"Bot {env.DISCORD_BOT_TOKEN}"
     }
     res = requests.get(f"{BASE_DISCORD_API_URL}/channels/{env.DISCORD_CHANNEL_ID}/webhooks", headers=discord_header)
-    logger.info(res.json())
+    if res.json():
+        webhook_data = res.json()[0]
+        webhook_id = webhook_data.get("id")
+        webhook_token = webhook_data.get("token")
+        webhook_url = webhook_data.get("url")
 
-    for i in range(RETRY_COUNT_MAX):
-        try:
-            # Reply message
-            lineworks.send_message_to_user(res_content,
-                                           bot_id,
-                                           user_id,
-                                           global_data["access_token"])
-        except RequestException as e:
-            body = e.response.json()
-            status_code = e.response.status_code
-            if status_code == 401:
-                if body["code"] == "UNAUTHORIZED":
-                    # Access Token has been expired.
-                    # Update Access Token
-                    logger.info("Update access token")
-                    res = lineworks.get_access_token(client_id,
-                                                     client_secret,
-                                                     service_account_id,
-                                                     privatekey,
-                                                     SCOPE)
-                    global_data["access_token"] = res["access_token"]
-                else:
-                    logger.exception(e)
-                    break
-            elif status_code == 429:
-                # Requests over rate limit.
-                logger.info("Over rate limit")
-                logger.info(body)
-            else:
-                logger.exception(e)
-                break
+        user_data = lineworks.get_user(user_id, global_data["access_token"])
+        user_name = f"{user_data.get('userName').get('lastName')} {user_data.get('userName').get('lastName')}"
+        user_photo = lineworks.get_user_photo(user_id, global_data["access_token"])
+        logger.info(user_photo)
 
-            # wait and retry
-            time.sleep(2 ** i)
-        else:
-            break
+        discord_content = {
+            "username": user_name,
+            "content": content
+        }
+
+        res = requests.post(f"{BASE_DISCORD_API_URL}/webhooks/{webhook_id}/{webhook_token}", json=discord_content)
+        logger.info(res.json())
 
     return {}
 

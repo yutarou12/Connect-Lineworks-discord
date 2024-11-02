@@ -8,6 +8,7 @@ from urllib import parse
 
 import json
 import requests
+from requests.structures import CaseInsensitiveDict
 
 BASE_API_URL = "https://www.worksapis.com/v1.0"
 BASE_AUTH_URL = "https://auth.worksmobile.com/oauth2/v2.0"
@@ -116,3 +117,43 @@ def send_message_to_user(content: dict, bot_id: str, user_id: str, access_token:
     r = requests.post(url=url, data=form_data, headers=headers)
 
     r.raise_for_status()
+
+
+def get_user(user_id: str, access_token: str) -> dict:
+    """Get user information
+
+    :param user_id: User ID
+    :param access_token: Access Token
+    :return: response
+    """
+    url = f"{BASE_API_URL}/users/{user_id}"
+
+    headers = {
+        'Authorization': "Bearer {}".format(access_token)
+    }
+
+    r = requests.get(url=url, headers=headers)
+
+    body = r.json()
+
+    return body
+
+
+def get_user_photo(user_id: str, access_token: str) -> CaseInsensitiveDict[str]:
+    """Get user photo
+
+    :param user_id: User ID
+    :param access_token: Access Token
+    :return: response
+    """
+    url = f"{BASE_API_URL}/users/{user_id}/photo"
+
+    headers = {
+        'Authorization': "Bearer {}".format(access_token)
+    }
+
+    r = requests.get(url=url, headers=headers)
+
+    body = r.headers
+
+    return body
