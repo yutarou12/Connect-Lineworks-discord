@@ -127,8 +127,8 @@ class SendingCog(commands.Cog):
             content = {
                 "content": {
                     "type": "image",
-                    "previewImageUrl": "https://drive.google.com/file/d/17L8bMvLT-tsVfdgbEiuR47utgkZBqxgJ/view",
-                    "originalContentUrl": "https://drive.google.com/file/d/17L8bMvLT-tsVfdgbEiuR47utgkZBqxgJ/view"
+                    "previewImageUrl": "https://drive.google.com/uc?id=17L8bMvLT-tsVfdgbEiuR47utgkZBqxgJ",
+                    "originalContentUrl": "https://drive.google.com/uc?id=17L8bMvLT-tsVfdgbEiuR47utgkZBqxgJ"
                 }
             }
 
