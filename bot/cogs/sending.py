@@ -126,8 +126,9 @@ class SendingCog(commands.Cog):
             # APIリクエスト (メッセージ送信)
             content = {
                 "content": {
-                    "type": "text",
-                    "text": message_content
+                    "type": "image",
+                    "previewImageUrl": "https://drive.google.com/file/d/17L8bMvLT-tsVfdgbEiuR47utgkZBqxgJ/view",
+                    "originalContentUrl": "https://drive.google.com/file/d/17L8bMvLT-tsVfdgbEiuR47utgkZBqxgJ/view"
                 }
             }
 
